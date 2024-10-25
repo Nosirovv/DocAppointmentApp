@@ -14,6 +14,7 @@ import uz.devops.service.MailService;
 import uz.devops.service.UserService;
 import uz.devops.service.dto.AdminUserDTO;
 import uz.devops.service.dto.PasswordChangeDTO;
+import uz.devops.service.dto.UserDTO;
 import uz.devops.web.rest.errors.*;
 import uz.devops.web.rest.vm.KeyAndPasswordVM;
 import uz.devops.web.rest.vm.ManagedUserVM;
@@ -56,27 +57,26 @@ public class AccountResource {
      */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
+    public User registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
         if (isPasswordLengthInvalid(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
-        User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-        mailService.sendActivationEmail(user);
+        return userService.registerUser(managedUserVM, managedUserVM.getPassword());
     }
 
-    /**
-     * {@code GET  /activate} : activate the registered user.
-     *
-     * @param key the activation key.
-     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be activated.
-     */
-    @GetMapping("/activate")
-    public void activateAccount(@RequestParam(value = "key") String key) {
-        Optional<User> user = userService.activateRegistration(key);
-        if (!user.isPresent()) {
-            throw new AccountResourceException("No user was found for this activation key");
-        }
-    }
+    //    /**
+    //     * {@code GET  /activate} : activate the registered user.
+    //     *
+    //     * @param key the activation key.
+    //     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be activated.
+    //     */
+    //    @GetMapping("/activate")
+    //    public void activateAccount(@RequestParam(value = "key") String key) {
+    //        Optional<User> user = userService.activateRegistration(key);
+    //        if (!user.isPresent()) {
+    //            throw new AccountResourceException("No user was found for this activation key");
+    //        }
+    //    }
 
     /**
      * {@code GET  /account} : get the current user.

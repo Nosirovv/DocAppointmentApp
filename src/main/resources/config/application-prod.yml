@@ -33,9 +33,11 @@ spring:
       enabled: false
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/DocTest
-    username: DocTest
+    url: jdbc:postgresql://localhost:5432/doc_test
+    username: doc_test
     password: password
+    datasource:
+      driver-class-name: org.postgresql.Driver
     hikari:
       poolName: Hikari
       auto-commit: false
