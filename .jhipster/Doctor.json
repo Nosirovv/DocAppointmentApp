@@ -1,0 +1,48 @@
+{
+  "annotations": {
+    "changelogDate": "20241025070757"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "specialization",
+      "fieldType": "Specialization",
+      "fieldValues": "GENERAL_PRACTITIONER,PEDIATRICIAN,SURGEON,CARDIOLOGIST,GYNECOLOGIST,DERMATOLOGIST,NEUROLOGIST,GASTROENTEROLOGIST,ENDOCRINOLOGIST,UROLOGIST,OPHTHALMOLOGIST,ENT_SPECIALIST,PSYCHIATRIST,REHABILITATION_SPECIALIST,ONCOLOGIST,ANESTHESIOLOGIST,GERIATRICIAN,PULMONOLOGIST,SPORTS_MEDICINE_SPECIALIST,MEDICAL_GENETICIST"
+    },
+    {
+      "fieldName": "availableFrom",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "availableTo",
+      "fieldType": "ZonedDateTime"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Doctor",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "appointment",
+      "otherEntityRelationshipName": "doctor",
+      "relationshipName": "appointments",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "medicalRecord",
+      "otherEntityRelationshipName": "doctor",
+      "relationshipName": "records",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

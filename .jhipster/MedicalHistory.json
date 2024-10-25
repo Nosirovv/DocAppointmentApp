@@ -1,0 +1,27 @@
+{
+  "annotations": {
+    "changelogDate": "20241025070758"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "createdDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "MedicalHistory",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "medicalRecord",
+      "otherEntityRelationshipName": "history",
+      "relationshipName": "records",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

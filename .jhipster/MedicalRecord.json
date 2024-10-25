@@ -1,0 +1,42 @@
+{
+  "annotations": {
+    "changelogDate": "20241025070759"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "createdDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "sicknessInfo",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "treatmentInto",
+      "fieldType": "String"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "MedicalRecord",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "doctor",
+      "otherEntityRelationshipName": "records",
+      "relationshipName": "doctor",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "medicalHistory",
+      "otherEntityRelationshipName": "records",
+      "relationshipName": "history",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

@@ -1,0 +1,40 @@
+{
+  "annotations": {
+    "changelogDate": "20241025070756"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "appointmentDateTime",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "AppointmentStatus",
+      "fieldValues": "PENDING,CONFIRMED,CANCELED,FINISHED"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Appointment",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "doctor",
+      "otherEntityRelationshipName": "appointments",
+      "relationshipName": "doctor",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "patient",
+      "otherEntityRelationshipName": "appointments",
+      "relationshipName": "patient",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

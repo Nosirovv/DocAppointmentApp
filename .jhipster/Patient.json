@@ -1,0 +1,38 @@
+{
+  "annotations": {
+    "changelogDate": "20241025070800"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "pattern"],
+      "fieldValidateRulesPattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+    },
+    {
+      "fieldName": "dateOfBirth",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Patient",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "appointment",
+      "otherEntityRelationshipName": "patient",
+      "relationshipName": "appointments",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

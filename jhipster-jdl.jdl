@@ -1,0 +1,68 @@
+
+entity Doctor {
+    name String required,
+    specialization Specialization , // enum
+    availableFrom ZonedDateTime,
+    availableTo ZonedDateTime
+}
+
+enum Specialization {
+    GENERAL_PRACTITIONER,
+    PEDIATRICIAN,
+    SURGEON,
+    CARDIOLOGIST,
+    GYNECOLOGIST,
+    DERMATOLOGIST,
+    NEUROLOGIST,
+    GASTROENTEROLOGIST,
+    ENDOCRINOLOGIST,
+    UROLOGIST,
+    OPHTHALMOLOGIST,
+    ENT_SPECIALIST,
+    PSYCHIATRIST,
+    REHABILITATION_SPECIALIST,
+    ONCOLOGIST,
+    ANESTHESIOLOGIST,
+    GERIATRICIAN,
+    PULMONOLOGIST,
+    SPORTS_MEDICINE_SPECIALIST,
+    MEDICAL_GENETICIST
+ }
+
+entity Patient {
+    name String required,
+    email String required pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/),
+    dateOfBirth LocalDate,
+
+}
+
+entity Appointment {
+    appointmentDateTime Instant required,
+    status AppointmentStatus
+}
+
+entity MedicalHistory{
+    createdDate LocalDate
+}
+
+entity MedicalRecord{
+    createdDate LocalDate,
+    sicknessInfo String,
+    treatmentInto String
+}
+
+enum AppointmentStatus {
+    PENDING, CONFIRMED, CANCELED, FINISHED
+}
+
+relationship OneToMany {
+    Doctor{appointments} to Appointment{doctor}
+    Patient{appointments} to Appointment{patient}
+    Doctor{records} to MedicalRecord{doctor}
+    MedicalHistory{records} to MedicalRecord{history}
+}
+
+dto * with mapstruct
+service * with serviceImpl
+paginate * with pagination
+filter *
