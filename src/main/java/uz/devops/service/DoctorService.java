@@ -1,7 +1,11 @@
 package uz.devops.service;
 
+import java.time.Instant;
 import java.util.Optional;
+import java.util.Set;
+import uz.devops.domain.Doctor;
 import uz.devops.service.dto.DoctorDTO;
+import uz.devops.service.dto.TimeSlotDto;
 
 /**
  * Service Interface for managing {@link uz.devops.domain.Doctor}.
@@ -45,4 +49,6 @@ public interface DoctorService {
      * @param id the id of the entity.
      */
     void delete(Long id);
+
+    Set<TimeSlotDto> freeTime(Instant scheduleStart, Instant scheduleEnd, Doctor doctor);
 }

@@ -15,7 +15,10 @@ public class AppointmentDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private Instant appointmentDateTime;
+    private Instant appointmentStartTime;
+
+    @NotNull
+    private Instant appointmentEndTime;
 
     private AppointmentStatus status;
 
@@ -31,12 +34,20 @@ public class AppointmentDTO implements Serializable {
         this.id = id;
     }
 
-    public Instant getAppointmentDateTime() {
-        return appointmentDateTime;
+    public Instant getAppointmentStartTime() {
+        return appointmentStartTime;
     }
 
-    public void setAppointmentDateTime(Instant appointmentDateTime) {
-        this.appointmentDateTime = appointmentDateTime;
+    public Instant getAppointmentEndTime() {
+        return appointmentEndTime;
+    }
+
+    public void setAppointmentStartTime(Instant appointmentStartTime) {
+        this.appointmentStartTime = appointmentStartTime;
+    }
+
+    public void setAppointmentEndTime(Instant appointmentEndTime) {
+        this.appointmentEndTime = appointmentEndTime;
     }
 
     public AppointmentStatus getStatus() {
@@ -89,7 +100,7 @@ public class AppointmentDTO implements Serializable {
     public String toString() {
         return "AppointmentDTO{" +
             "id=" + getId() +
-            ", appointmentDateTime='" + getAppointmentDateTime() + "'" +
+            ", appointmentStartTime='" + getAppointmentStartTime() + "'" +
             ", status='" + getStatus() + "'" +
             ", doctor=" + getDoctor() +
             ", patient=" + getPatient() +

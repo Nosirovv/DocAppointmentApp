@@ -1,14 +1,18 @@
 package uz.devops.service.impl;
 
-import java.util.Optional;
+import java.time.Instant;
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uz.devops.domain.Appointment;
 import uz.devops.domain.Doctor;
+import uz.devops.repository.AppointmentRepository;
 import uz.devops.repository.DoctorRepository;
 import uz.devops.service.DoctorService;
 import uz.devops.service.dto.DoctorDTO;
+import uz.devops.service.dto.TimeSlotDto;
 import uz.devops.service.mapper.DoctorMapper;
 
 /**
@@ -24,9 +28,12 @@ public class DoctorServiceImpl implements DoctorService {
 
     private final DoctorMapper doctorMapper;
 
-    public DoctorServiceImpl(DoctorRepository doctorRepository, DoctorMapper doctorMapper) {
+    private final AppointmentRepository appointmentRepository;
+
+    public DoctorServiceImpl(DoctorRepository doctorRepository, DoctorMapper doctorMapper, AppointmentRepository appointmentRepository) {
         this.doctorRepository = doctorRepository;
         this.doctorMapper = doctorMapper;
+        this.appointmentRepository = appointmentRepository;
     }
 
     @Override
@@ -71,5 +78,28 @@ public class DoctorServiceImpl implements DoctorService {
     public void delete(Long id) {
         LOG.debug("Request to delete Doctor : {}", id);
         doctorRepository.deleteById(id);
+    }
+
+    public Set<TimeSlotDto> freeTime(Instant scheduleStart, Instant scheduleEnd, Doctor doctor) {
+        Set<TimeSlotDto> availableSlots = new LinkedHashSet<>();
+
+        List<Appointment> bookedAppointment = appointmentRepository.findByDoctor(doctor);
+
+        Instant currentStart = scheduleStart;
+        for (Appointment booked : bookedAppointment) {
+            Instant bookedStart = booked.getAppointmentStartTime();
+            Instant bookedEnd = booked.getAppointmentEndTime();
+
+            if (currentStart.isBefore(bookedStart)) {
+                availableSlots.add(new TimeSlotDto(currentStart, bookedStart));
+            }
+
+            currentStart = bookedEnd;
+        }
+
+        if (currentStart.isBefore(scheduleEnd)) {
+            availableSlots.add(new TimeSlotDto(currentStart, scheduleEnd));
+        }
+        return availableSlots;
     }
 }

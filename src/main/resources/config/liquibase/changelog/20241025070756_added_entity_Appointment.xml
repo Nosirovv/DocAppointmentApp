@@ -53,4 +53,17 @@
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>
+
+  <!-- Step 1: Add new columns for start and end times -->
+  <changeSet id="1-add-appointment-start-end-time-columns" author="your_name">
+    <addColumn tableName="appointment">
+      <column name="appointment_start_time" type="TIMESTAMP" remarks="Appointment start time"/>
+      <column name="appointment_end_time" type="TIMESTAMP" remarks="Appointment end time"/>
+    </addColumn>
+  </changeSet>
+
+  <!-- Step 2: Drop the old appointment_date_time column -->
+  <changeSet id="2-drop-appointment-date-time-column" author="your_name">
+    <dropColumn tableName="appointment" columnName="appointment_date_time"/>
+  </changeSet>
 </databaseChangeLog>

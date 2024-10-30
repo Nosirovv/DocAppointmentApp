@@ -79,7 +79,7 @@ public class AppointmentQueryService extends QueryService<Appointment> {
             }
             if (criteria.getAppointmentDateTime() != null) {
                 specification = specification.and(
-                    buildRangeSpecification(criteria.getAppointmentDateTime(), Appointment_.appointmentDateTime)
+                    buildRangeSpecification(criteria.getAppointmentDateTime(), Appointment_.appointmentStartTime)
                 );
             }
             if (criteria.getStatus() != null) {

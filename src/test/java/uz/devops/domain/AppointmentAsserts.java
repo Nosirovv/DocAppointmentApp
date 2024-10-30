@@ -48,7 +48,7 @@ public class AppointmentAsserts {
         assertThat(expected)
             .as("Verify Appointment relevant properties")
             .satisfies(e ->
-                assertThat(e.getAppointmentDateTime()).as("check appointmentDateTime").isEqualTo(actual.getAppointmentDateTime())
+                assertThat(e.getAppointmentStartTime()).as("check appointmentDateTime").isEqualTo(actual.getAppointmentStartTime())
             )
             .satisfies(e -> assertThat(e.getStatus()).as("check status").isEqualTo(actual.getStatus()));
     }

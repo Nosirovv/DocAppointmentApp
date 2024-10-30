@@ -77,7 +77,7 @@ class AppointmentResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Appointment createEntity() {
-        return new Appointment().appointmentDateTime(DEFAULT_APPOINTMENT_DATE_TIME).status(DEFAULT_STATUS);
+        return new Appointment().appointmentStartTime(DEFAULT_APPOINTMENT_DATE_TIME).status(DEFAULT_STATUS);
     }
 
     /**
@@ -87,7 +87,7 @@ class AppointmentResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Appointment createUpdatedEntity() {
-        return new Appointment().appointmentDateTime(UPDATED_APPOINTMENT_DATE_TIME).status(UPDATED_STATUS);
+        return new Appointment().appointmentStartTime(UPDATED_APPOINTMENT_DATE_TIME).status(UPDATED_STATUS);
     }
 
     @BeforeEach
@@ -150,7 +150,7 @@ class AppointmentResourceIT {
     void checkAppointmentDateTimeIsRequired() throws Exception {
         long databaseSizeBeforeTest = getRepositoryCount();
         // set the field null
-        appointment.setAppointmentDateTime(null);
+        appointment.setAppointmentStartTime(null);
 
         // Create the Appointment, which fails.
         AppointmentDTO appointmentDTO = appointmentMapper.toDto(appointment);
@@ -174,7 +174,7 @@ class AppointmentResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(appointment.getId().intValue())))
-            .andExpect(jsonPath("$.[*].appointmentDateTime").value(hasItem(DEFAULT_APPOINTMENT_DATE_TIME.toString())))
+            .andExpect(jsonPath("$.[*].appointmentStartTime").value(hasItem(DEFAULT_APPOINTMENT_DATE_TIME.toString())))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
     }
 
@@ -190,7 +190,7 @@ class AppointmentResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(appointment.getId().intValue()))
-            .andExpect(jsonPath("$.appointmentDateTime").value(DEFAULT_APPOINTMENT_DATE_TIME.toString()))
+            .andExpect(jsonPath("$.appointmentStartTime").value(DEFAULT_APPOINTMENT_DATE_TIME.toString()))
             .andExpect(jsonPath("$.status").value(DEFAULT_STATUS.toString()));
     }
 
@@ -215,10 +215,10 @@ class AppointmentResourceIT {
         // Initialize the database
         insertedAppointment = appointmentRepository.saveAndFlush(appointment);
 
-        // Get all the appointmentList where appointmentDateTime equals to
+        // Get all the appointmentList where appointmentStartTime equals to
         defaultAppointmentFiltering(
-            "appointmentDateTime.equals=" + DEFAULT_APPOINTMENT_DATE_TIME,
-            "appointmentDateTime.equals=" + UPDATED_APPOINTMENT_DATE_TIME
+            "appointmentStartTime.equals=" + DEFAULT_APPOINTMENT_DATE_TIME,
+            "appointmentStartTime.equals=" + UPDATED_APPOINTMENT_DATE_TIME
         );
     }
 
@@ -228,10 +228,10 @@ class AppointmentResourceIT {
         // Initialize the database
         insertedAppointment = appointmentRepository.saveAndFlush(appointment);
 
-        // Get all the appointmentList where appointmentDateTime in
+        // Get all the appointmentList where appointmentStartTime in
         defaultAppointmentFiltering(
-            "appointmentDateTime.in=" + DEFAULT_APPOINTMENT_DATE_TIME + "," + UPDATED_APPOINTMENT_DATE_TIME,
-            "appointmentDateTime.in=" + UPDATED_APPOINTMENT_DATE_TIME
+            "appointmentStartTime.in=" + DEFAULT_APPOINTMENT_DATE_TIME + "," + UPDATED_APPOINTMENT_DATE_TIME,
+            "appointmentStartTime.in=" + UPDATED_APPOINTMENT_DATE_TIME
         );
     }
 
@@ -241,8 +241,8 @@ class AppointmentResourceIT {
         // Initialize the database
         insertedAppointment = appointmentRepository.saveAndFlush(appointment);
 
-        // Get all the appointmentList where appointmentDateTime is not null
-        defaultAppointmentFiltering("appointmentDateTime.specified=true", "appointmentDateTime.specified=false");
+        // Get all the appointmentList where appointmentStartTime is not null
+        defaultAppointmentFiltering("appointmentStartTime.specified=true", "appointmentStartTime.specified=false");
     }
 
     @Test
@@ -333,7 +333,7 @@ class AppointmentResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(appointment.getId().intValue())))
-            .andExpect(jsonPath("$.[*].appointmentDateTime").value(hasItem(DEFAULT_APPOINTMENT_DATE_TIME.toString())))
+            .andExpect(jsonPath("$.[*].appointmentStartTime").value(hasItem(DEFAULT_APPOINTMENT_DATE_TIME.toString())))
             .andExpect(jsonPath("$.[*].status").value(hasItem(DEFAULT_STATUS.toString())));
 
         // Check, that the count call also returns 1
@@ -382,7 +382,7 @@ class AppointmentResourceIT {
         Appointment updatedAppointment = appointmentRepository.findById(appointment.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedAppointment are not directly saved in db
         em.detach(updatedAppointment);
-        updatedAppointment.appointmentDateTime(UPDATED_APPOINTMENT_DATE_TIME).status(UPDATED_STATUS);
+        updatedAppointment.appointmentStartTime(UPDATED_APPOINTMENT_DATE_TIME).status(UPDATED_STATUS);
         AppointmentDTO appointmentDTO = appointmentMapper.toDto(updatedAppointment);
 
         restAppointmentMockMvc
@@ -503,7 +503,7 @@ class AppointmentResourceIT {
         Appointment partialUpdatedAppointment = new Appointment();
         partialUpdatedAppointment.setId(appointment.getId());
 
-        partialUpdatedAppointment.appointmentDateTime(UPDATED_APPOINTMENT_DATE_TIME).status(UPDATED_STATUS);
+        partialUpdatedAppointment.appointmentStartTime(UPDATED_APPOINTMENT_DATE_TIME).status(UPDATED_STATUS);
 
         restAppointmentMockMvc
             .perform(

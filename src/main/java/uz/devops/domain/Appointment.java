@@ -27,8 +27,12 @@ public class Appointment implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "appointment_date_time", nullable = false)
-    private Instant appointmentDateTime;
+    @Column(name = "appointment_start_time", nullable = false)
+    private Instant appointmentStartTime;
+
+    @NotNull
+    @Column(name = "appointment_end_time", nullable = false)
+    private Instant appointmentEndTime;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -57,17 +61,30 @@ public class Appointment implements Serializable {
         this.id = id;
     }
 
-    public Instant getAppointmentDateTime() {
-        return this.appointmentDateTime;
+    public Instant getAppointmentStartTime() {
+        return this.appointmentStartTime;
     }
 
-    public Appointment appointmentDateTime(Instant appointmentDateTime) {
-        this.setAppointmentDateTime(appointmentDateTime);
+    public Instant getAppointmentEndTime() {
+        return this.appointmentEndTime;
+    }
+
+    public Appointment appointmentStartTime(Instant appointmentStartTime) {
+        this.setAppointmentStartTime(appointmentStartTime);
         return this;
     }
 
-    public void setAppointmentDateTime(Instant appointmentDateTime) {
-        this.appointmentDateTime = appointmentDateTime;
+    public Appointment appointmentEndTime(Instant appointmentEndTime) {
+        this.setAppointmentEndTime(appointmentEndTime);
+        return this;
+    }
+
+    public void setAppointmentStartTime(Instant appointmentStartTime) {
+        this.appointmentStartTime = appointmentStartTime;
+    }
+
+    public void setAppointmentEndTime(Instant appointmentEndTime) {
+        this.appointmentEndTime = appointmentEndTime;
     }
 
     public AppointmentStatus getStatus() {
@@ -133,7 +150,7 @@ public class Appointment implements Serializable {
     public String toString() {
         return "Appointment{" +
             "id=" + getId() +
-            ", appointmentDateTime='" + getAppointmentDateTime() + "'" +
+            ", appointmentStartTime='" + getAppointmentStartTime() + "'" +
             ", status='" + getStatus() + "'" +
             "}";
     }
