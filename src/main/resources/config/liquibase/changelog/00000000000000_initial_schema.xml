@@ -118,4 +118,14 @@
             <column name="local_date" type="date"/>
         </createTable>
     </changeSet>
+
+  <changeSet id="add-roles" author="jhipster">
+    <insert tableName="jhi_authority">
+      <column name="name" value="ROLE_DOCTOR"/>
+    </insert>
+    <insert tableName="jhi_authority">
+      <column name="name" value="ROLE_PATIENT"/>
+    </insert>
+  </changeSet>
+
 </databaseChangeLog>
