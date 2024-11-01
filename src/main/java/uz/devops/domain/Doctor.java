@@ -3,8 +3,9 @@ package uz.devops.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import java.io.Serial;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 import org.hibernate.annotations.Cache;
@@ -20,6 +21,7 @@ import uz.devops.domain.enumeration.Specialization;
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Doctor implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -37,10 +39,10 @@ public class Doctor implements Serializable {
     private Specialization specialization;
 
     @Column(name = "available_from")
-    private ZonedDateTime availableFrom;
+    private LocalTime availableFrom;
 
     @Column(name = "available_to")
-    private ZonedDateTime availableTo;
+    private LocalTime availableTo;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "doctor")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -93,29 +95,29 @@ public class Doctor implements Serializable {
         this.specialization = specialization;
     }
 
-    public ZonedDateTime getAvailableFrom() {
+    public LocalTime getAvailableFrom() {
         return this.availableFrom;
     }
 
-    public Doctor availableFrom(ZonedDateTime availableFrom) {
+    public Doctor availableFrom(LocalTime availableFrom) {
         this.setAvailableFrom(availableFrom);
         return this;
     }
 
-    public void setAvailableFrom(ZonedDateTime availableFrom) {
+    public void setAvailableFrom(LocalTime availableFrom) {
         this.availableFrom = availableFrom;
     }
 
-    public ZonedDateTime getAvailableTo() {
+    public LocalTime getAvailableTo() {
         return this.availableTo;
     }
 
-    public Doctor availableTo(ZonedDateTime availableTo) {
+    public Doctor availableTo(LocalTime availableTo) {
         this.setAvailableTo(availableTo);
         return this;
     }
 
-    public void setAvailableTo(ZonedDateTime availableTo) {
+    public void setAvailableTo(LocalTime availableTo) {
         this.availableTo = availableTo;
     }
 

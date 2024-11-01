@@ -1,6 +1,8 @@
 package uz.devops.service.impl;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,15 +82,16 @@ public class DoctorServiceImpl implements DoctorService {
         doctorRepository.deleteById(id);
     }
 
-    public Set<TimeSlotDto> freeTime(Instant scheduleStart, Instant scheduleEnd, Doctor doctor) {
+    @Override
+    public Set<TimeSlotDto> freeTime(LocalTime scheduleStart, LocalTime scheduleEnd, Integer doctorId) {
         Set<TimeSlotDto> availableSlots = new LinkedHashSet<>();
 
-        List<Appointment> bookedAppointment = appointmentRepository.findByDoctor(doctor);
+        List<Appointment> bookedAppointment = appointmentRepository.findByDoctorId(doctorId);
 
-        Instant currentStart = scheduleStart;
+        LocalTime currentStart = scheduleStart;
         for (Appointment booked : bookedAppointment) {
-            Instant bookedStart = booked.getAppointmentStartTime();
-            Instant bookedEnd = booked.getAppointmentEndTime();
+            LocalTime bookedStart = booked.getAppointmentStartTime();
+            LocalTime bookedEnd = booked.getAppointmentEndTime();
 
             if (currentStart.isBefore(bookedStart)) {
                 availableSlots.add(new TimeSlotDto(currentStart, bookedStart));

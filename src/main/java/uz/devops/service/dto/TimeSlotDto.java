@@ -1,31 +1,33 @@
 package uz.devops.service.dto;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZonedDateTime;
 
 public class TimeSlotDto {
 
-    private Instant startTime;
-    private Instant endTime;
+    private LocalTime startTime;
+    private LocalTime endTime;
 
-    public TimeSlotDto(Instant startTime, Instant endTime) {
+    public TimeSlotDto(LocalTime startTime, LocalTime endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
-    public Instant getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Instant startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public Instant getEndTime() {
+    public LocalTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Instant endTime) {
+    public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
 

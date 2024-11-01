@@ -20,10 +20,10 @@
             <column name="specialization" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="available_from" type="${datetimeType}">
+            <column name="available_from" type="time">
                 <constraints nullable="true" />
             </column>
-            <column name="available_to" type="${datetimeType}">
+            <column name="available_to" type="time">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
@@ -56,4 +56,6 @@
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>
+
+
 </databaseChangeLog>

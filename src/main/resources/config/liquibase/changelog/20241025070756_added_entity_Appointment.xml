@@ -66,4 +66,9 @@
   <changeSet id="2-drop-appointment-date-time-column" author="your_name">
     <dropColumn tableName="appointment" columnName="appointment_date_time"/>
   </changeSet>
+
+  <changeSet id="change-appointment-localtime-types" author="Anvarjon">
+    <modifyDataType tableName="appointment" columnName="appointment_start_time" newDataType="TIME"/>
+    <modifyDataType tableName="appointment" columnName="appointment_end_time" newDataType="TIME"/>
+  </changeSet>
 </databaseChangeLog>

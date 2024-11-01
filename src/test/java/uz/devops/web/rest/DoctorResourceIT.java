@@ -10,10 +10,7 @@ import static uz.devops.web.rest.TestUtil.sameInstant;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.AfterEach;
@@ -46,13 +43,15 @@ class DoctorResourceIT {
     private static final Specialization DEFAULT_SPECIALIZATION = Specialization.GENERAL_PRACTITIONER;
     private static final Specialization UPDATED_SPECIALIZATION = Specialization.PEDIATRICIAN;
 
-    private static final ZonedDateTime DEFAULT_AVAILABLE_FROM = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
-    private static final ZonedDateTime UPDATED_AVAILABLE_FROM = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
-    private static final ZonedDateTime SMALLER_AVAILABLE_FROM = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
+    // Vaqtning boshlang'ich (default) qiymatini 00:00 deb belgilaymiz
+    private static final LocalTime DEFAULT_AVAILABLE_FROM = LocalTime.of(0, 0);
+    private static final LocalTime UPDATED_AVAILABLE_FROM = LocalTime.now().withNano(0);
+    private static final LocalTime SMALLER_AVAILABLE_FROM = LocalTime.of(23, 59); // Masalan, kechki 23:59
 
-    private static final ZonedDateTime DEFAULT_AVAILABLE_TO = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
-    private static final ZonedDateTime UPDATED_AVAILABLE_TO = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
-    private static final ZonedDateTime SMALLER_AVAILABLE_TO = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
+    // Tugash vaqtining boshlang'ich (default) qiymatini 00:00 deb belgilaymiz
+    private static final LocalTime DEFAULT_AVAILABLE_TO = LocalTime.of(0, 0);
+    private static final LocalTime UPDATED_AVAILABLE_TO = LocalTime.now().withNano(0);
+    private static final LocalTime SMALLER_AVAILABLE_TO = LocalTime.of(23, 59); // Tugash vaqtiga kechki soat berish mumkin
 
     private static final String ENTITY_API_URL = "/api/doctors";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -193,8 +192,8 @@ class DoctorResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(doctor.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].specialization").value(hasItem(DEFAULT_SPECIALIZATION.toString())))
-            .andExpect(jsonPath("$.[*].availableFrom").value(hasItem(sameInstant(DEFAULT_AVAILABLE_FROM))))
-            .andExpect(jsonPath("$.[*].availableTo").value(hasItem(sameInstant(DEFAULT_AVAILABLE_TO))));
+            .andExpect(jsonPath("$.[*].availableFrom").value(hasItem(DEFAULT_AVAILABLE_FROM.toString())))
+            .andExpect(jsonPath("$.[*].availableTo").value(hasItem(DEFAULT_AVAILABLE_TO.toString())));
     }
 
     @Test
@@ -211,8 +210,8 @@ class DoctorResourceIT {
             .andExpect(jsonPath("$.id").value(doctor.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.specialization").value(DEFAULT_SPECIALIZATION.toString()))
-            .andExpect(jsonPath("$.availableFrom").value(sameInstant(DEFAULT_AVAILABLE_FROM)))
-            .andExpect(jsonPath("$.availableTo").value(sameInstant(DEFAULT_AVAILABLE_TO)));
+            .andExpect(jsonPath("$.[*].availableFrom").value(hasItem(DEFAULT_AVAILABLE_FROM.toString())))
+            .andExpect(jsonPath("$.[*].availableTo").value(hasItem(DEFAULT_AVAILABLE_TO.toString())));
     }
 
     @Test
@@ -490,8 +489,8 @@ class DoctorResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(doctor.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].specialization").value(hasItem(DEFAULT_SPECIALIZATION.toString())))
-            .andExpect(jsonPath("$.[*].availableFrom").value(hasItem(sameInstant(DEFAULT_AVAILABLE_FROM))))
-            .andExpect(jsonPath("$.[*].availableTo").value(hasItem(sameInstant(DEFAULT_AVAILABLE_TO))));
+            .andExpect(jsonPath("$.[*].availableFrom").value(hasItem(DEFAULT_AVAILABLE_FROM.toString())))
+            .andExpect(jsonPath("$.[*].availableTo").value(hasItem(DEFAULT_AVAILABLE_TO.toString())));
 
         // Check, that the count call also returns 1
         restDoctorMockMvc

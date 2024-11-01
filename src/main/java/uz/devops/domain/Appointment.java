@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import uz.devops.domain.enumeration.AppointmentStatus;
@@ -28,11 +30,11 @@ public class Appointment implements Serializable {
 
     @NotNull
     @Column(name = "appointment_start_time", nullable = false)
-    private Instant appointmentStartTime;
+    private LocalTime appointmentStartTime;
 
     @NotNull
     @Column(name = "appointment_end_time", nullable = false)
-    private Instant appointmentEndTime;
+    private LocalTime appointmentEndTime;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
@@ -61,29 +63,29 @@ public class Appointment implements Serializable {
         this.id = id;
     }
 
-    public Instant getAppointmentStartTime() {
+    public LocalTime getAppointmentStartTime() {
         return this.appointmentStartTime;
     }
 
-    public Instant getAppointmentEndTime() {
+    public LocalTime getAppointmentEndTime() {
         return this.appointmentEndTime;
     }
 
-    public Appointment appointmentStartTime(Instant appointmentStartTime) {
+    public Appointment appointmentStartTime(LocalTime appointmentStartTime) {
         this.setAppointmentStartTime(appointmentStartTime);
         return this;
     }
 
-    public Appointment appointmentEndTime(Instant appointmentEndTime) {
+    public Appointment appointmentEndTime(LocalTime appointmentEndTime) {
         this.setAppointmentEndTime(appointmentEndTime);
         return this;
     }
 
-    public void setAppointmentStartTime(Instant appointmentStartTime) {
+    public void setAppointmentStartTime(LocalTime appointmentStartTime) {
         this.appointmentStartTime = appointmentStartTime;
     }
 
-    public void setAppointmentEndTime(Instant appointmentEndTime) {
+    public void setAppointmentEndTime(LocalTime appointmentEndTime) {
         this.appointmentEndTime = appointmentEndTime;
     }
 

@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -205,9 +207,11 @@ public class DoctorResource {
     }
 
     @GetMapping("/{doctorId}/available-slots")
-    public Set<TimeSlotDto> getFreeTime(@PathVariable Long doctorId, @RequestParam Instant startTime, @RequestParam Instant endTime) {
-        Doctor doctor = doctorRepository.findById(doctorId).get();
-
-        return doctorService.freeTime(startTime, endTime, doctor);
+    public Set<TimeSlotDto> getFreeTime(
+        @PathVariable Integer doctorId,
+        @RequestParam LocalTime startTime,
+        @RequestParam LocalTime endTime
+    ) {
+        return doctorService.freeTime(startTime, endTime, doctorId);
     }
 }

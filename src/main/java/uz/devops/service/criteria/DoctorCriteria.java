@@ -7,6 +7,7 @@ import org.springdoc.core.annotations.ParameterObject;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.*;
 import uz.devops.domain.enumeration.Specialization;
+import uz.devops.service.criteria.filter.LocalTimeFilter;
 
 /**
  * Criteria class for the {@link uz.devops.domain.Doctor} entity. This class is used
@@ -46,9 +47,9 @@ public class DoctorCriteria implements Serializable, Criteria {
 
     private SpecializationFilter specialization;
 
-    private ZonedDateTimeFilter availableFrom;
+    private LocalTimeFilter availableFrom;
 
-    private ZonedDateTimeFilter availableTo;
+    private LocalTimeFilter availableTo;
 
     private LongFilter appointmentsId;
 
@@ -62,8 +63,8 @@ public class DoctorCriteria implements Serializable, Criteria {
         this.id = other.optionalId().map(LongFilter::copy).orElse(null);
         this.name = other.optionalName().map(StringFilter::copy).orElse(null);
         this.specialization = other.optionalSpecialization().map(SpecializationFilter::copy).orElse(null);
-        this.availableFrom = other.optionalAvailableFrom().map(ZonedDateTimeFilter::copy).orElse(null);
-        this.availableTo = other.optionalAvailableTo().map(ZonedDateTimeFilter::copy).orElse(null);
+        this.availableFrom = other.optionalAvailableFrom().map(LocalTimeFilter::copy).orElse(null);
+        this.availableTo = other.optionalAvailableTo().map(LocalTimeFilter::copy).orElse(null);
         this.appointmentsId = other.optionalAppointmentsId().map(LongFilter::copy).orElse(null);
         this.recordsId = other.optionalRecordsId().map(LongFilter::copy).orElse(null);
         this.distinct = other.distinct;
@@ -131,41 +132,41 @@ public class DoctorCriteria implements Serializable, Criteria {
         this.specialization = specialization;
     }
 
-    public ZonedDateTimeFilter getAvailableFrom() {
+    public LocalTimeFilter getAvailableFrom() {
         return availableFrom;
     }
 
-    public Optional<ZonedDateTimeFilter> optionalAvailableFrom() {
+    public Optional<LocalTimeFilter> optionalAvailableFrom() {
         return Optional.ofNullable(availableFrom);
     }
 
-    public ZonedDateTimeFilter availableFrom() {
+    public LocalTimeFilter availableFrom() {
         if (availableFrom == null) {
-            setAvailableFrom(new ZonedDateTimeFilter());
+            setAvailableFrom(new LocalTimeFilter());
         }
         return availableFrom;
     }
 
-    public void setAvailableFrom(ZonedDateTimeFilter availableFrom) {
+    public void setAvailableFrom(LocalTimeFilter availableFrom) {
         this.availableFrom = availableFrom;
     }
 
-    public ZonedDateTimeFilter getAvailableTo() {
+    public LocalTimeFilter getAvailableTo() {
         return availableTo;
     }
 
-    public Optional<ZonedDateTimeFilter> optionalAvailableTo() {
+    public Optional<LocalTimeFilter> optionalAvailableTo() {
         return Optional.ofNullable(availableTo);
     }
 
-    public ZonedDateTimeFilter availableTo() {
+    public LocalTimeFilter availableTo() {
         if (availableTo == null) {
-            setAvailableTo(new ZonedDateTimeFilter());
+            setAvailableTo(new LocalTimeFilter());
         }
         return availableTo;
     }
 
-    public void setAvailableTo(ZonedDateTimeFilter availableTo) {
+    public void setAvailableTo(LocalTimeFilter availableTo) {
         this.availableTo = availableTo;
     }
 

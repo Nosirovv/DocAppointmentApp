@@ -10,6 +10,7 @@ import static uz.devops.web.rest.TestUtil.createUpdateProxyForBean;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;
+import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -39,8 +40,8 @@ import uz.devops.service.mapper.AppointmentMapper;
 @WithMockUser
 class AppointmentResourceIT {
 
-    private static final Instant DEFAULT_APPOINTMENT_DATE_TIME = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_APPOINTMENT_DATE_TIME = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+    private static final LocalTime DEFAULT_APPOINTMENT_DATE_TIME = LocalTime.of(0, 0);
+    private static final LocalTime UPDATED_APPOINTMENT_DATE_TIME = LocalTime.now();
 
     private static final AppointmentStatus DEFAULT_STATUS = AppointmentStatus.PENDING;
     private static final AppointmentStatus UPDATED_STATUS = AppointmentStatus.CONFIRMED;

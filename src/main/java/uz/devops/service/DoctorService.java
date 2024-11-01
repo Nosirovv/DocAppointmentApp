@@ -1,6 +1,8 @@
 package uz.devops.service;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Optional;
 import java.util.Set;
 import uz.devops.domain.Doctor;
@@ -50,5 +52,5 @@ public interface DoctorService {
      */
     void delete(Long id);
 
-    Set<TimeSlotDto> freeTime(Instant scheduleStart, Instant scheduleEnd, Doctor doctor);
+    Set<TimeSlotDto> freeTime(LocalTime scheduleStart, LocalTime scheduleEnd, Integer doctorId);
 }

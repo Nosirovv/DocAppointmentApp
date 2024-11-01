@@ -2,7 +2,7 @@ package uz.devops.service.dto;
 
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 import uz.devops.domain.enumeration.Specialization;
 
@@ -19,9 +19,9 @@ public class DoctorDTO implements Serializable {
 
     private Specialization specialization;
 
-    private ZonedDateTime availableFrom;
+    private LocalTime availableFrom;
 
-    private ZonedDateTime availableTo;
+    private LocalTime availableTo;
 
     public Long getId() {
         return id;
@@ -47,19 +47,19 @@ public class DoctorDTO implements Serializable {
         this.specialization = specialization;
     }
 
-    public ZonedDateTime getAvailableFrom() {
+    public LocalTime getAvailableFrom() {
         return availableFrom;
     }
 
-    public void setAvailableFrom(ZonedDateTime availableFrom) {
+    public void setAvailableFrom(LocalTime availableFrom) {
         this.availableFrom = availableFrom;
     }
 
-    public ZonedDateTime getAvailableTo() {
+    public LocalTime getAvailableTo() {
         return availableTo;
     }
 
-    public void setAvailableTo(ZonedDateTime availableTo) {
+    public void setAvailableTo(LocalTime availableTo) {
         this.availableTo = availableTo;
     }
 

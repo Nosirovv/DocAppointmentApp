@@ -1,12 +1,14 @@
 package uz.devops.service.criteria;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import org.springdoc.core.annotations.ParameterObject;
 import tech.jhipster.service.Criteria;
 import tech.jhipster.service.filter.*;
 import uz.devops.domain.enumeration.AppointmentStatus;
+import uz.devops.service.criteria.filter.LocalTimeFilter;
 
 /**
  * Criteria class for the {@link uz.devops.domain.Appointment} entity. This class is used
@@ -42,7 +44,7 @@ public class AppointmentCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private InstantFilter appointmentDateTime;
+    private LocalTimeFilter appointmentDateTime;
 
     private AppointmentStatusFilter status;
 
@@ -56,7 +58,7 @@ public class AppointmentCriteria implements Serializable, Criteria {
 
     public AppointmentCriteria(AppointmentCriteria other) {
         this.id = other.optionalId().map(LongFilter::copy).orElse(null);
-        this.appointmentDateTime = other.optionalAppointmentDateTime().map(InstantFilter::copy).orElse(null);
+        this.appointmentDateTime = other.optionalAppointmentDateTime().map(s -> appointmentDateTime.copy()).orElse(null);
         this.status = other.optionalStatus().map(AppointmentStatusFilter::copy).orElse(null);
         this.doctorId = other.optionalDoctorId().map(LongFilter::copy).orElse(null);
         this.patientId = other.optionalPatientId().map(LongFilter::copy).orElse(null);
@@ -87,22 +89,22 @@ public class AppointmentCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
-    public InstantFilter getAppointmentDateTime() {
+    public LocalTimeFilter getAppointmentDateTime() {
         return appointmentDateTime;
     }
 
-    public Optional<InstantFilter> optionalAppointmentDateTime() {
+    public Optional<LocalTimeFilter> optionalAppointmentDateTime() {
         return Optional.ofNullable(appointmentDateTime);
     }
 
-    public InstantFilter appointmentDateTime() {
+    public LocalTimeFilter appointmentDateTime() {
         if (appointmentDateTime == null) {
-            setAppointmentDateTime(new InstantFilter());
+            setAppointmentDateTime(new LocalTimeFilter());
         }
         return appointmentDateTime;
     }
 
-    public void setAppointmentDateTime(InstantFilter appointmentDateTime) {
+    public void setAppointmentDateTime(LocalTimeFilter appointmentDateTime) {
         this.appointmentDateTime = appointmentDateTime;
     }
 

@@ -2,7 +2,7 @@ package uz.devops.service.dto;
 
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalTime;
 import java.util.Objects;
 import uz.devops.domain.enumeration.AppointmentStatus;
 
@@ -15,10 +15,10 @@ public class AppointmentDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private Instant appointmentStartTime;
+    private LocalTime appointmentStartTime;
 
     @NotNull
-    private Instant appointmentEndTime;
+    private LocalTime appointmentEndTime;
 
     private AppointmentStatus status;
 
@@ -34,19 +34,19 @@ public class AppointmentDTO implements Serializable {
         this.id = id;
     }
 
-    public Instant getAppointmentStartTime() {
+    public LocalTime getAppointmentStartTime() {
         return appointmentStartTime;
     }
 
-    public Instant getAppointmentEndTime() {
+    public LocalTime getAppointmentEndTime() {
         return appointmentEndTime;
     }
 
-    public void setAppointmentStartTime(Instant appointmentStartTime) {
+    public void setAppointmentStartTime(LocalTime appointmentStartTime) {
         this.appointmentStartTime = appointmentStartTime;
     }
 
-    public void setAppointmentEndTime(Instant appointmentEndTime) {
+    public void setAppointmentEndTime(LocalTime appointmentEndTime) {
         this.appointmentEndTime = appointmentEndTime;
     }
 

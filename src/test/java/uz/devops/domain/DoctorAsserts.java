@@ -1,7 +1,6 @@
 package uz.devops.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static uz.devops.domain.AssertUtils.zonedDataTimeSameInstant;
 
 public class DoctorAsserts {
 
@@ -50,18 +49,8 @@ public class DoctorAsserts {
             .as("Verify Doctor relevant properties")
             .satisfies(e -> assertThat(e.getName()).as("check name").isEqualTo(actual.getName()))
             .satisfies(e -> assertThat(e.getSpecialization()).as("check specialization").isEqualTo(actual.getSpecialization()))
-            .satisfies(e ->
-                assertThat(e.getAvailableFrom())
-                    .as("check availableFrom")
-                    .usingComparator(zonedDataTimeSameInstant)
-                    .isEqualTo(actual.getAvailableFrom())
-            )
-            .satisfies(e ->
-                assertThat(e.getAvailableTo())
-                    .as("check availableTo")
-                    .usingComparator(zonedDataTimeSameInstant)
-                    .isEqualTo(actual.getAvailableTo())
-            );
+            .satisfies(e -> assertThat(e.getAvailableFrom()).as("check availableFrom").isEqualTo(actual.getAvailableFrom()))
+            .satisfies(e -> assertThat(e.getAvailableTo()).as("check availableTo").isEqualTo(actual.getAvailableTo()));
     }
 
     /**
