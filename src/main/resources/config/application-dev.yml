@@ -42,6 +42,10 @@ spring:
     hikari:
       poolName: Hikari
       auto-commit: false
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
   h2:
     console:
       # disable spring boot built-in h2-console since we start it manually with correct configuration

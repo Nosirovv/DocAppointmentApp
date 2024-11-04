@@ -1,5 +1,6 @@
 package uz.devops.service;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +21,7 @@ public class DoctorServiceTest {
     public void init() {
         var mapper = new DoctorMapperImpl();
         this.repository = Mockito.mock(AppointmentRepository.class);
-        this.service = new DoctorServiceImpl(Mockito.mock(DoctorRepository.class), mapper, repository);
+        //        this.service = new DoctorServiceImpl(Mockito.mock(DoctorRepository.class), mapper, repository);
     }
 
     @Test
@@ -37,8 +38,9 @@ public class DoctorServiceTest {
 
         var start = LocalTime.of(9, 0);
         var end = LocalTime.of(16, 0);
+        LocalDate date = LocalDate.now();
 
-        var response = service.freeTime(start, end, 1);
+        var response = service.freeTime(start, end, 1, date);
         System.out.println(response);
     }
 }

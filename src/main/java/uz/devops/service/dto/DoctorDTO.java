@@ -19,9 +19,24 @@ public class DoctorDTO implements Serializable {
 
     private Specialization specialization;
 
-    private LocalTime availableFrom;
+    private AdminUserDTO adminUserDTO;
 
-    private LocalTime availableTo;
+    public AdminUserDTO getAdminUserDTO() {
+        return adminUserDTO;
+    }
+
+    public DoctorDTO() {}
+
+    public DoctorDTO(Long id, String name, Specialization specialization, AdminUserDTO adminUserDTO) {
+        this.id = id;
+        this.name = name;
+        this.specialization = specialization;
+        this.adminUserDTO = adminUserDTO;
+    }
+
+    public void setAdminUserDTO(AdminUserDTO adminUserDTO) {
+        this.adminUserDTO = adminUserDTO;
+    }
 
     public Long getId() {
         return id;
@@ -45,22 +60,6 @@ public class DoctorDTO implements Serializable {
 
     public void setSpecialization(Specialization specialization) {
         this.specialization = specialization;
-    }
-
-    public LocalTime getAvailableFrom() {
-        return availableFrom;
-    }
-
-    public void setAvailableFrom(LocalTime availableFrom) {
-        this.availableFrom = availableFrom;
-    }
-
-    public LocalTime getAvailableTo() {
-        return availableTo;
-    }
-
-    public void setAvailableTo(LocalTime availableTo) {
-        this.availableTo = availableTo;
     }
 
     @Override
@@ -91,8 +90,6 @@ public class DoctorDTO implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", specialization='" + getSpecialization() + "'" +
-            ", availableFrom='" + getAvailableFrom() + "'" +
-            ", availableTo='" + getAvailableTo() + "'" +
             "}";
     }
 }

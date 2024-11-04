@@ -1,5 +1,6 @@
 package uz.devops.repository;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.*;
@@ -15,4 +16,6 @@ import uz.devops.domain.Doctor;
 @Repository
 public interface AppointmentRepository extends JpaRepository<Appointment, Long>, JpaSpecificationExecutor<Appointment> {
     List<Appointment> findByDoctorId(Integer doctor_id);
+
+    List<Appointment> findAppointmentByDoctorIdAndAndDate(Integer doctor_id, LocalDate date);
 }

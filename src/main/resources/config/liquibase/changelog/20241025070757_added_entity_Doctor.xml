@@ -26,6 +26,9 @@
             <column name="available_to" type="time">
                 <constraints nullable="true" />
             </column>
+            <column name="user_id" type="bigint">
+              <constraints foreignKeyName="fk_doctor_to_user"/>
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
         <dropDefaultValue tableName="doctor" columnName="available_from" columnDataType="${datetimeType}"/>

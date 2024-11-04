@@ -2,6 +2,7 @@ package uz.devops.service.dto;
 
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Objects;
 import uz.devops.domain.enumeration.AppointmentStatus;
@@ -20,11 +21,22 @@ public class AppointmentDTO implements Serializable {
     @NotNull
     private LocalTime appointmentEndTime;
 
+    @NotNull
+    private LocalDate date;
+
     private AppointmentStatus status;
 
     private DoctorDTO doctor;
 
     private PatientDTO patient;
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
 
     public Long getId() {
         return id;

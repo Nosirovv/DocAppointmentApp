@@ -83,12 +83,6 @@ public class DoctorQueryService extends QueryService<Doctor> {
             if (criteria.getSpecialization() != null) {
                 specification = specification.and(buildSpecification(criteria.getSpecialization(), Doctor_.specialization));
             }
-            if (criteria.getAvailableFrom() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getAvailableFrom(), Doctor_.availableFrom));
-            }
-            if (criteria.getAvailableTo() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getAvailableTo(), Doctor_.availableTo));
-            }
             if (criteria.getAppointmentsId() != null) {
                 specification = specification.and(
                     buildSpecification(criteria.getAppointmentsId(), root ->

@@ -38,11 +38,16 @@ public class Doctor implements Serializable {
     @Column(name = "specialization")
     private Specialization specialization;
 
-    @Column(name = "available_from")
-    private LocalTime availableFrom;
+    @OneToOne
+    private User user;
 
-    @Column(name = "available_to")
-    private LocalTime availableTo;
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "doctor")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
@@ -93,32 +98,6 @@ public class Doctor implements Serializable {
 
     public void setSpecialization(Specialization specialization) {
         this.specialization = specialization;
-    }
-
-    public LocalTime getAvailableFrom() {
-        return this.availableFrom;
-    }
-
-    public Doctor availableFrom(LocalTime availableFrom) {
-        this.setAvailableFrom(availableFrom);
-        return this;
-    }
-
-    public void setAvailableFrom(LocalTime availableFrom) {
-        this.availableFrom = availableFrom;
-    }
-
-    public LocalTime getAvailableTo() {
-        return this.availableTo;
-    }
-
-    public Doctor availableTo(LocalTime availableTo) {
-        this.setAvailableTo(availableTo);
-        return this;
-    }
-
-    public void setAvailableTo(LocalTime availableTo) {
-        this.availableTo = availableTo;
     }
 
     public Set<Appointment> getAppointments() {
@@ -209,8 +188,6 @@ public class Doctor implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", specialization='" + getSpecialization() + "'" +
-            ", availableFrom='" + getAvailableFrom() + "'" +
-            ", availableTo='" + getAvailableTo() + "'" +
             "}";
     }
 }

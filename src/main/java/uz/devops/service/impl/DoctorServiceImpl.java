@@ -1,20 +1,20 @@
 package uz.devops.service.impl;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import jakarta.persistence.EntityNotFoundException;
+import java.time.*;
 import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uz.devops.domain.Appointment;
-import uz.devops.domain.Doctor;
-import uz.devops.repository.AppointmentRepository;
-import uz.devops.repository.DoctorRepository;
+import uz.devops.domain.*;
+import uz.devops.domain.enumeration.AppointmentStatus;
+import uz.devops.repository.*;
+import uz.devops.security.AuthoritiesConstants;
 import uz.devops.service.DoctorService;
 import uz.devops.service.dto.DoctorDTO;
 import uz.devops.service.dto.TimeSlotDto;
+import uz.devops.service.dto.WorkPlanDto;
 import uz.devops.service.mapper.DoctorMapper;
 
 /**
@@ -32,19 +32,54 @@ public class DoctorServiceImpl implements DoctorService {
 
     private final AppointmentRepository appointmentRepository;
 
-    public DoctorServiceImpl(DoctorRepository doctorRepository, DoctorMapper doctorMapper, AppointmentRepository appointmentRepository) {
+    private final WorkPlanRepository workPlanRepository;
+
+    private final DoctorWorkScheduleRepository doctorWorkScheduleRepository;
+
+    private final UserRepository userRepository;
+
+    public DoctorServiceImpl(
+        DoctorRepository doctorRepository,
+        DoctorMapper doctorMapper,
+        AppointmentRepository appointmentRepository,
+        WorkPlanRepository workPlanRepository,
+        DoctorWorkScheduleRepository doctorWorkScheduleRepository,
+        UserRepository userRepository
+    ) {
         this.doctorRepository = doctorRepository;
         this.doctorMapper = doctorMapper;
         this.appointmentRepository = appointmentRepository;
+        this.workPlanRepository = workPlanRepository;
+        this.doctorWorkScheduleRepository = doctorWorkScheduleRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     public DoctorDTO save(DoctorDTO doctorDTO) {
         LOG.debug("Request to save Doctor : {}", doctorDTO);
         Doctor doctor = doctorMapper.toEntity(doctorDTO);
+
+        User user = userRepository.findById(doctor.getUser().getId()).orElseThrow(() -> new EntityNotFoundException("User not found"));
+
+        Authority doctorAuthority = new Authority();
+        doctorAuthority.setName(AuthoritiesConstants.DOCTOR);
+
+        user.getAuthorities().add(doctorAuthority);
+
         doctor = doctorRepository.save(doctor);
+
         return doctorMapper.toDto(doctor);
     }
+
+    //    User user = userRepository.findById(doctor.getUser().getId())
+    //        .orElseThrow(() -> new EntityNotFoundException("User not found"));
+    //
+    //    // User rolini o'zgartirish
+    //        user.setRole(Role.DOCTOR); // DOCTOR rolini berish
+    //        userRepository.save(user); // Yangilangan User ni saqlash
+    //
+    //    // Doctor ni saqlash
+    //    doctor = doctorRepository.save(doctor);
 
     @Override
     public DoctorDTO update(DoctorDTO doctorDTO) {
@@ -83,10 +118,11 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public Set<TimeSlotDto> freeTime(LocalTime scheduleStart, LocalTime scheduleEnd, Integer doctorId) {
+    public Set<TimeSlotDto> freeTime(LocalTime scheduleStart, LocalTime scheduleEnd, Integer doctorId, LocalDate date) {
         Set<TimeSlotDto> availableSlots = new LinkedHashSet<>();
 
-        List<Appointment> bookedAppointment = appointmentRepository.findByDoctorId(doctorId);
+        //        List<Appointment> bookedAppointment = appointmentRepository.findByDoctorId(doctorId);
+        List<Appointment> bookedAppointment = appointmentRepository.findAppointmentByDoctorIdAndAndDate(doctorId, date);
 
         LocalTime currentStart = scheduleStart;
         for (Appointment booked : bookedAppointment) {
@@ -104,5 +140,40 @@ public class DoctorServiceImpl implements DoctorService {
             availableSlots.add(new TimeSlotDto(currentStart, scheduleEnd));
         }
         return availableSlots;
+    }
+
+    @Override
+    public void createWorkPlan(WorkPlanDto workPlanDto) {
+        WorkPlan workPlan = new WorkPlan();
+        workPlan.setDoctor(workPlanDto.getDoctorId());
+        workPlan.setWeekDay(workPlanDto.getWeekDay());
+        workPlan.setStartTime(workPlanDto.getStartTime());
+        workPlan.setEndTime(workPlanDto.getEndTime());
+        workPlanRepository.save(workPlan);
+        System.out.println(workPlan);
+    }
+
+    @Override
+    public void generateWeeklyScheduleForDoctor(Integer doctorId, LocalDate startDate, LocalDate endDate) {
+        List<WorkPlan> workPlans = workPlanRepository.findByDoctorId(doctorId);
+
+        for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
+            DayOfWeek dayOfWeek = date.getDayOfWeek();
+
+            LocalDate finalDate = date;
+            workPlans
+                .stream()
+                .filter(wp -> wp.getWeekDay().equals(dayOfWeek))
+                .forEach(wp -> {
+                    DoctorWorkSchedule schedule = new DoctorWorkSchedule();
+                    schedule.setDoctor(doctorId);
+                    schedule.setDate(finalDate);
+                    schedule.setStartTime(wp.getStartTime());
+                    schedule.setEndTime(wp.getEndTime());
+                    schedule.setDescription("Generated from work plan");
+
+                    doctorWorkScheduleRepository.save(schedule);
+                });
+        }
     }
 }

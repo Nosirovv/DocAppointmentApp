@@ -85,11 +85,7 @@ class DoctorResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Doctor createEntity() {
-        return new Doctor()
-            .name(DEFAULT_NAME)
-            .specialization(DEFAULT_SPECIALIZATION)
-            .availableFrom(DEFAULT_AVAILABLE_FROM)
-            .availableTo(DEFAULT_AVAILABLE_TO);
+        return new Doctor().name(DEFAULT_NAME).specialization(DEFAULT_SPECIALIZATION);
     }
 
     /**
@@ -99,11 +95,7 @@ class DoctorResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Doctor createUpdatedEntity() {
-        return new Doctor()
-            .name(UPDATED_NAME)
-            .specialization(UPDATED_SPECIALIZATION)
-            .availableFrom(UPDATED_AVAILABLE_FROM)
-            .availableTo(UPDATED_AVAILABLE_TO);
+        return new Doctor().name(UPDATED_NAME).specialization(UPDATED_SPECIALIZATION);
     }
 
     @BeforeEach
@@ -538,11 +530,7 @@ class DoctorResourceIT {
         Doctor updatedDoctor = doctorRepository.findById(doctor.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedDoctor are not directly saved in db
         em.detach(updatedDoctor);
-        updatedDoctor
-            .name(UPDATED_NAME)
-            .specialization(UPDATED_SPECIALIZATION)
-            .availableFrom(UPDATED_AVAILABLE_FROM)
-            .availableTo(UPDATED_AVAILABLE_TO);
+        updatedDoctor.name(UPDATED_NAME).specialization(UPDATED_SPECIALIZATION);
         DoctorDTO doctorDTO = doctorMapper.toDto(updatedDoctor);
 
         restDoctorMockMvc
@@ -628,7 +616,7 @@ class DoctorResourceIT {
         Doctor partialUpdatedDoctor = new Doctor();
         partialUpdatedDoctor.setId(doctor.getId());
 
-        partialUpdatedDoctor.specialization(UPDATED_SPECIALIZATION).availableTo(UPDATED_AVAILABLE_TO);
+        partialUpdatedDoctor.specialization(UPDATED_SPECIALIZATION);
 
         restDoctorMockMvc
             .perform(
@@ -656,11 +644,7 @@ class DoctorResourceIT {
         Doctor partialUpdatedDoctor = new Doctor();
         partialUpdatedDoctor.setId(doctor.getId());
 
-        partialUpdatedDoctor
-            .name(UPDATED_NAME)
-            .specialization(UPDATED_SPECIALIZATION)
-            .availableFrom(UPDATED_AVAILABLE_FROM)
-            .availableTo(UPDATED_AVAILABLE_TO);
+        partialUpdatedDoctor.name(UPDATED_NAME).specialization(UPDATED_SPECIALIZATION);
 
         restDoctorMockMvc
             .perform(
