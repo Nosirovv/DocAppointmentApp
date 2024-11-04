@@ -143,19 +143,20 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public void createWorkPlan(WorkPlanDto workPlanDto) {
+    public WorkPlan createWorkPlan(WorkPlanDto workPlanDto) {
         WorkPlan workPlan = new WorkPlan();
         workPlan.setDoctor(workPlanDto.getDoctorId());
         workPlan.setWeekDay(workPlanDto.getWeekDay());
         workPlan.setStartTime(workPlanDto.getStartTime());
         workPlan.setEndTime(workPlanDto.getEndTime());
         workPlanRepository.save(workPlan);
-        System.out.println(workPlan);
+        return workPlan;
     }
 
     @Override
-    public void generateWeeklyScheduleForDoctor(Integer doctorId, LocalDate startDate, LocalDate endDate) {
+    public List<DoctorWorkSchedule> generateWeeklyScheduleForDoctor(Integer doctorId, LocalDate startDate, LocalDate endDate) {
         List<WorkPlan> workPlans = workPlanRepository.findByDoctorId(doctorId);
+        List<DoctorWorkSchedule> doctorWorkSchedules = new ArrayList<>();
 
         for (LocalDate date = startDate; !date.isAfter(endDate); date = date.plusDays(1)) {
             DayOfWeek dayOfWeek = date.getDayOfWeek();
@@ -173,7 +174,33 @@ public class DoctorServiceImpl implements DoctorService {
                     schedule.setDescription("Generated from work plan");
 
                     doctorWorkScheduleRepository.save(schedule);
+                    doctorWorkSchedules.add(schedule);
                 });
         }
+        return doctorWorkSchedules;
+    }
+
+    @Override
+    public WorkPlan updateWorkPlanTimes(Integer id, LocalTime startTime, LocalTime endTime) {
+        WorkPlan workPlan = workPlanRepository
+            .findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("WorkPlan not found with id: " + id));
+
+        workPlan.setStartTime(startTime);
+        workPlan.setEndTime(endTime);
+
+        return workPlanRepository.save(workPlan);
+    }
+
+    @Override
+    public DoctorWorkSchedule updateWorkScheduleTimes(Integer id, LocalTime startTime, LocalTime endTime) {
+        DoctorWorkSchedule workSchedule = doctorWorkScheduleRepository
+            .findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("DoctorWorkSchedule not found with id: " + id));
+
+        workSchedule.setStartTime(startTime);
+        workSchedule.setEndTime(endTime);
+
+        return doctorWorkScheduleRepository.save(workSchedule);
     }
 }

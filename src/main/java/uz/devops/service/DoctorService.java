@@ -1,13 +1,13 @@
 package uz.devops.service;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.springframework.cglib.core.Local;
 import uz.devops.domain.Doctor;
+import uz.devops.domain.DoctorWorkSchedule;
+import uz.devops.domain.WorkPlan;
 import uz.devops.service.dto.DoctorDTO;
 import uz.devops.service.dto.TimeSlotDto;
 import uz.devops.service.dto.WorkPlanDto;
@@ -57,7 +57,11 @@ public interface DoctorService {
 
     Set<TimeSlotDto> freeTime(LocalTime scheduleStart, LocalTime scheduleEnd, Integer doctorId, LocalDate date);
 
-    void createWorkPlan(WorkPlanDto workPlanDto);
+    WorkPlan createWorkPlan(WorkPlanDto workPlanDto);
 
-    void generateWeeklyScheduleForDoctor(Integer doctorId, LocalDate startDate, LocalDate endDate);
+    List<DoctorWorkSchedule> generateWeeklyScheduleForDoctor(Integer doctorId, LocalDate startDate, LocalDate endDate);
+
+    WorkPlan updateWorkPlanTimes(Integer id, LocalTime startTime, LocalTime endTime);
+
+    DoctorWorkSchedule updateWorkScheduleTimes(Integer id, LocalTime startTime, LocalTime endTime);
 }

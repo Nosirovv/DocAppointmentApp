@@ -4,21 +4,13 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.time.*;
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +20,8 @@ import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import uz.devops.domain.Doctor;
+import uz.devops.domain.DoctorWorkSchedule;
+import uz.devops.domain.WorkPlan;
 import uz.devops.repository.DoctorRepository;
 import uz.devops.service.DoctorQueryService;
 import uz.devops.service.DoctorService;
@@ -227,26 +221,46 @@ public class DoctorResource {
     }
 
     @PostMapping("/work-plan")
-    public ResponseEntity<String> createWorkPlan(@RequestBody WorkPlanDto workPlanDto) {
+    public ResponseEntity<WorkPlan> createWorkPlan(@RequestBody WorkPlanDto workPlanDto) {
         try {
-            doctorService.createWorkPlan(workPlanDto);
-            return new ResponseEntity<>("Work plan muvaffaqiyatli yaratildi.", HttpStatus.CREATED);
+            WorkPlan createdWorkPlan = doctorService.createWorkPlan(workPlanDto);
+            return new ResponseEntity<>(createdWorkPlan, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>("Work plan yaratishda xatolik yuz berdi.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/generate-schedule")
-    public ResponseEntity<String> generateWeeklyScheduleForDoctor(
+    public ResponseEntity<List<DoctorWorkSchedule>> generateWeeklyScheduleForDoctor(
         @RequestParam Integer doctorId,
         @RequestParam LocalDate startDate,
         @RequestParam LocalDate endDate
     ) {
         try {
-            doctorService.generateWeeklyScheduleForDoctor(doctorId, startDate, endDate);
-            return new ResponseEntity<>("Haftalik jadval muvaffaqiyatli yaratildi.", HttpStatus.OK);
+            List<DoctorWorkSchedule> schedules = doctorService.generateWeeklyScheduleForDoctor(doctorId, startDate, endDate);
+            return new ResponseEntity<>(schedules, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Haftalik jadval yaratishda xatolik yuz berdi.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @PutMapping("/times")
+    public ResponseEntity<WorkPlan> updateWorkPlanTimesByWeekday(
+        @RequestParam Integer id,
+        @RequestParam LocalTime startTime,
+        @RequestParam LocalTime endTime
+    ) {
+        WorkPlan updatedWorkPlans = doctorService.updateWorkPlanTimes(id, startTime, endTime);
+        return ResponseEntity.ok(updatedWorkPlans);
+    }
+
+    @PutMapping("/times-schedule")
+    public ResponseEntity<DoctorWorkSchedule> updateWorkScheduleTimes(
+        @RequestParam Integer id,
+        @RequestParam LocalTime startTime,
+        @RequestParam LocalTime endTime
+    ) {
+        DoctorWorkSchedule updatedWorkSchedule = doctorService.updateWorkScheduleTimes(id, startTime, endTime);
+        return ResponseEntity.ok(updatedWorkSchedule);
     }
 }
