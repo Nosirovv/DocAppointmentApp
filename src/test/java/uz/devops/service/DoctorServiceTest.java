@@ -40,7 +40,7 @@ public class DoctorServiceTest {
         var end = LocalTime.of(16, 0);
         LocalDate date = LocalDate.now();
 
-        var response = service.freeTime(start, end, 1, date);
+        var response = service.getfreeTime(start, end, 1, date);
         System.out.println(response);
     }
 }

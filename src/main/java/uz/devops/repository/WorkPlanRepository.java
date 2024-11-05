@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import uz.devops.domain.WorkPlan;
 
 public interface WorkPlanRepository extends JpaRepository<WorkPlan, Integer> {
-    List<WorkPlan> findByDoctorId(Integer doctorId);
+    List<WorkPlan> findByDoctorId(Long doctorId);
 
-    Optional<WorkPlan> findById(Integer id);
+    Optional<WorkPlan> findById(Long id);
 }

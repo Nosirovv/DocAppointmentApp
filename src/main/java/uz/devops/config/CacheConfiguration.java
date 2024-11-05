@@ -59,6 +59,7 @@ public class CacheConfiguration {
             createCache(cm, uz.devops.domain.MedicalRecord.class.getName());
             createCache(cm, uz.devops.domain.Patient.class.getName());
             createCache(cm, uz.devops.domain.Patient.class.getName() + ".appointments");
+            createCache(cm, uz.devops.domain.DoctorWorkSchedule.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

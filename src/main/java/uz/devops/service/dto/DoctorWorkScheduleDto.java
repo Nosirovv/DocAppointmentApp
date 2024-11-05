@@ -5,18 +5,18 @@ import java.time.LocalTime;
 
 public class DoctorWorkScheduleDto {
 
-    private Integer doctorId;
+    private Integer doctorIdDto;
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
     private String description;
 
-    public Integer getDoctorId() {
-        return doctorId;
+    public Integer getDoctorIdDto() {
+        return doctorIdDto;
     }
 
-    public void setDoctorId(Integer doctorId) {
-        this.doctorId = doctorId;
+    public void setDoctorIdDto(Integer doctorIdDto) {
+        this.doctorIdDto = doctorIdDto;
     }
 
     public LocalDate getDate() {

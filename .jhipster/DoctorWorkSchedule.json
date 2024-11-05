@@ -1,0 +1,12 @@
+{
+  "annotations": {
+    "changelogDate": "20241105105310"
+  },
+  "fields": [],
+  "name": "DoctorWorkSchedule",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "no"
+}

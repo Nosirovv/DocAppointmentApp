@@ -8,14 +8,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uz.devops.domain.*;
-import uz.devops.domain.enumeration.AppointmentStatus;
 import uz.devops.repository.*;
 import uz.devops.security.AuthoritiesConstants;
 import uz.devops.service.DoctorService;
 import uz.devops.service.dto.DoctorDTO;
+import uz.devops.service.dto.DoctorWorkScheduleDto;
 import uz.devops.service.dto.TimeSlotDto;
 import uz.devops.service.dto.WorkPlanDto;
 import uz.devops.service.mapper.DoctorMapper;
+import uz.devops.service.mapper.DoctorWorkScheduleMapper;
+import uz.devops.service.mapper.WorkPlanMapper;
 
 /**
  * Service Implementation for managing {@link uz.devops.domain.Doctor}.
@@ -38,13 +40,19 @@ public class DoctorServiceImpl implements DoctorService {
 
     private final UserRepository userRepository;
 
+    private final WorkPlanMapper workPlanMapper;
+
+    private final DoctorWorkScheduleMapper doctorWorkScheduleMapper;
+
     public DoctorServiceImpl(
         DoctorRepository doctorRepository,
         DoctorMapper doctorMapper,
         AppointmentRepository appointmentRepository,
         WorkPlanRepository workPlanRepository,
         DoctorWorkScheduleRepository doctorWorkScheduleRepository,
-        UserRepository userRepository
+        UserRepository userRepository,
+        WorkPlanMapper workPlanMapper,
+        DoctorWorkScheduleMapper doctorWorkScheduleMapper
     ) {
         this.doctorRepository = doctorRepository;
         this.doctorMapper = doctorMapper;
@@ -52,6 +60,8 @@ public class DoctorServiceImpl implements DoctorService {
         this.workPlanRepository = workPlanRepository;
         this.doctorWorkScheduleRepository = doctorWorkScheduleRepository;
         this.userRepository = userRepository;
+        this.workPlanMapper = workPlanMapper;
+        this.doctorWorkScheduleMapper = doctorWorkScheduleMapper;
     }
 
     @Override
@@ -70,16 +80,6 @@ public class DoctorServiceImpl implements DoctorService {
 
         return doctorMapper.toDto(doctor);
     }
-
-    //    User user = userRepository.findById(doctor.getUser().getId())
-    //        .orElseThrow(() -> new EntityNotFoundException("User not found"));
-    //
-    //    // User rolini o'zgartirish
-    //        user.setRole(Role.DOCTOR); // DOCTOR rolini berish
-    //        userRepository.save(user); // Yangilangan User ni saqlash
-    //
-    //    // Doctor ni saqlash
-    //    doctor = doctorRepository.save(doctor);
 
     @Override
     public DoctorDTO update(DoctorDTO doctorDTO) {
@@ -118,10 +118,13 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public Set<TimeSlotDto> freeTime(LocalTime scheduleStart, LocalTime scheduleEnd, Integer doctorId, LocalDate date) {
+    public Set<TimeSlotDto> getfreeTime(LocalTime scheduleStart, LocalTime scheduleEnd, Integer doctorId, LocalDate date) {
+        if (scheduleStart == null || scheduleEnd == null || doctorId == null || date == null) {
+            throw new IllegalArgumentException("Inputs must not be null");
+        }
+
         Set<TimeSlotDto> availableSlots = new LinkedHashSet<>();
 
-        //        List<Appointment> bookedAppointment = appointmentRepository.findByDoctorId(doctorId);
         List<Appointment> bookedAppointment = appointmentRepository.findAppointmentByDoctorIdAndAndDate(doctorId, date);
 
         LocalTime currentStart = scheduleStart;
@@ -143,18 +146,14 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public WorkPlan createWorkPlan(WorkPlanDto workPlanDto) {
-        WorkPlan workPlan = new WorkPlan();
-        workPlan.setDoctor(workPlanDto.getDoctorId());
-        workPlan.setWeekDay(workPlanDto.getWeekDay());
-        workPlan.setStartTime(workPlanDto.getStartTime());
-        workPlan.setEndTime(workPlanDto.getEndTime());
+    public WorkPlanDto createWorkPlan(WorkPlanDto workPlanDto) {
+        WorkPlan workPlan = workPlanMapper.toEntity(workPlanDto);
         workPlanRepository.save(workPlan);
-        return workPlan;
+        return workPlanMapper.toDto(workPlan);
     }
 
     @Override
-    public List<DoctorWorkSchedule> generateWeeklyScheduleForDoctor(Integer doctorId, LocalDate startDate, LocalDate endDate) {
+    public List<DoctorWorkScheduleDto> generateWeeklyScheduleForDoctor(Long doctorId, LocalDate startDate, LocalDate endDate) {
         List<WorkPlan> workPlans = workPlanRepository.findByDoctorId(doctorId);
         List<DoctorWorkSchedule> doctorWorkSchedules = new ArrayList<>();
 
@@ -167,7 +166,7 @@ public class DoctorServiceImpl implements DoctorService {
                 .filter(wp -> wp.getWeekDay().equals(dayOfWeek))
                 .forEach(wp -> {
                     DoctorWorkSchedule schedule = new DoctorWorkSchedule();
-                    schedule.setDoctor(doctorId);
+                    schedule.setDoctorId(doctorId);
                     schedule.setDate(finalDate);
                     schedule.setStartTime(wp.getStartTime());
                     schedule.setEndTime(wp.getEndTime());
@@ -177,11 +176,11 @@ public class DoctorServiceImpl implements DoctorService {
                     doctorWorkSchedules.add(schedule);
                 });
         }
-        return doctorWorkSchedules;
+        return doctorWorkScheduleMapper.toDto(doctorWorkSchedules);
     }
 
     @Override
-    public WorkPlan updateWorkPlanTimes(Integer id, LocalTime startTime, LocalTime endTime) {
+    public WorkPlanDto updateWorkPlanTimes(Long id, LocalTime startTime, LocalTime endTime) {
         WorkPlan workPlan = workPlanRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("WorkPlan not found with id: " + id));
@@ -189,11 +188,11 @@ public class DoctorServiceImpl implements DoctorService {
         workPlan.setStartTime(startTime);
         workPlan.setEndTime(endTime);
 
-        return workPlanRepository.save(workPlan);
+        return workPlanMapper.toDto(workPlanRepository.save(workPlan));
     }
 
     @Override
-    public DoctorWorkSchedule updateWorkScheduleTimes(Integer id, LocalTime startTime, LocalTime endTime) {
+    public DoctorWorkScheduleDto updateWorkScheduleTimes(Long id, LocalTime startTime, LocalTime endTime) {
         DoctorWorkSchedule workSchedule = doctorWorkScheduleRepository
             .findById(id)
             .orElseThrow(() -> new EntityNotFoundException("DoctorWorkSchedule not found with id: " + id));
@@ -201,6 +200,6 @@ public class DoctorServiceImpl implements DoctorService {
         workSchedule.setStartTime(startTime);
         workSchedule.setEndTime(endTime);
 
-        return doctorWorkScheduleRepository.save(workSchedule);
+        return doctorWorkScheduleMapper.toDto(doctorWorkScheduleRepository.save(workSchedule));
     }
 }

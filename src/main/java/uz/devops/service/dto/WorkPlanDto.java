@@ -6,17 +6,17 @@ import uz.devops.domain.Doctor;
 
 public class WorkPlanDto {
 
-    private Doctor doctorId;
+    private DoctorDTO doctorDTO;
     private DayOfWeek weekDay;
     private LocalTime startTime;
     private LocalTime endTime;
 
-    public Doctor getDoctorId() {
-        return doctorId;
+    public DoctorDTO getDoctorDTO() {
+        return doctorDTO;
     }
 
-    public void setDoctorId(Doctor doctorId) {
-        this.doctorId = doctorId;
+    public void setDoctorDTO(DoctorDTO doctorDTO) {
+        this.doctorDTO = doctorDTO;
     }
 
     public DayOfWeek getWeekDay() {

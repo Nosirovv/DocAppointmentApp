@@ -9,6 +9,7 @@ import uz.devops.domain.Doctor;
 import uz.devops.domain.DoctorWorkSchedule;
 import uz.devops.domain.WorkPlan;
 import uz.devops.service.dto.DoctorDTO;
+import uz.devops.service.dto.DoctorWorkScheduleDto;
 import uz.devops.service.dto.TimeSlotDto;
 import uz.devops.service.dto.WorkPlanDto;
 
@@ -55,13 +56,13 @@ public interface DoctorService {
      */
     void delete(Long id);
 
-    Set<TimeSlotDto> freeTime(LocalTime scheduleStart, LocalTime scheduleEnd, Integer doctorId, LocalDate date);
+    Set<TimeSlotDto> getfreeTime(LocalTime scheduleStart, LocalTime scheduleEnd, Integer doctorId, LocalDate date);
 
-    WorkPlan createWorkPlan(WorkPlanDto workPlanDto);
+    WorkPlanDto createWorkPlan(WorkPlanDto workPlanDto);
 
-    List<DoctorWorkSchedule> generateWeeklyScheduleForDoctor(Integer doctorId, LocalDate startDate, LocalDate endDate);
+    List<DoctorWorkScheduleDto> generateWeeklyScheduleForDoctor(Long doctorId, LocalDate startDate, LocalDate endDate);
 
-    WorkPlan updateWorkPlanTimes(Integer id, LocalTime startTime, LocalTime endTime);
+    WorkPlanDto updateWorkPlanTimes(Long id, LocalTime startTime, LocalTime endTime);
 
-    DoctorWorkSchedule updateWorkScheduleTimes(Integer id, LocalTime startTime, LocalTime endTime);
+    DoctorWorkScheduleDto updateWorkScheduleTimes(Long id, LocalTime startTime, LocalTime endTime);
 }

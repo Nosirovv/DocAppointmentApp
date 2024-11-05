@@ -11,11 +11,19 @@ public class DoctorWorkSchedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer doctorID;
+    private Long doctorId;
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
     private String description;
+
+    public Long getDoctorId() {
+        return doctorId;
+    }
+
+    public void setDoctorId(Long doctorId) {
+        this.doctorId = doctorId;
+    }
 
     @Override
     public String toString() {
@@ -23,8 +31,6 @@ public class DoctorWorkSchedule {
             "DoctorWorkSchedule{" +
             "id=" +
             id +
-            ", doctorID=" +
-            doctorID +
             ", date=" +
             date +
             ", startTime=" +
@@ -44,14 +50,6 @@ public class DoctorWorkSchedule {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getDoctor() {
-        return doctorID;
-    }
-
-    public void setDoctor(Integer doctorID) {
-        this.doctorID = doctorID;
     }
 
     public LocalDate getDate() {

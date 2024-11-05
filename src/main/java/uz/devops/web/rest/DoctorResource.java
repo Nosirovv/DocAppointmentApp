@@ -27,6 +27,7 @@ import uz.devops.service.DoctorQueryService;
 import uz.devops.service.DoctorService;
 import uz.devops.service.criteria.DoctorCriteria;
 import uz.devops.service.dto.DoctorDTO;
+import uz.devops.service.dto.DoctorWorkScheduleDto;
 import uz.devops.service.dto.TimeSlotDto;
 import uz.devops.service.dto.WorkPlanDto;
 import uz.devops.web.rest.errors.BadRequestAlertException;
@@ -205,7 +206,7 @@ public class DoctorResource {
     }
 
     @GetMapping("/{doctorId}/available-slots")
-    public ResponseEntity<?> getFreeTime(
+    public ResponseEntity<Set<TimeSlotDto>> getFreeTime(
         @PathVariable Integer doctorId,
         @RequestParam LocalTime startTime,
         @RequestParam LocalTime endTime,
@@ -213,17 +214,17 @@ public class DoctorResource {
     ) {
         Optional<Doctor> doctor = doctorRepository.findById(Long.valueOf(doctorId));
         if (doctor.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Doctor ID " + doctorId + " not found");
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Set<TimeSlotDto> availableSlots = doctorService.freeTime(startTime, endTime, doctorId, date);
+        Set<TimeSlotDto> availableSlots = doctorService.getfreeTime(startTime, endTime, doctorId, date);
         return ResponseEntity.ok(availableSlots);
     }
 
     @PostMapping("/work-plan")
-    public ResponseEntity<WorkPlan> createWorkPlan(@RequestBody WorkPlanDto workPlanDto) {
+    public ResponseEntity<WorkPlanDto> createWorkPlan(@RequestBody WorkPlanDto workPlanDto) {
         try {
-            WorkPlan createdWorkPlan = doctorService.createWorkPlan(workPlanDto);
+            WorkPlanDto createdWorkPlan = doctorService.createWorkPlan(workPlanDto);
             return new ResponseEntity<>(createdWorkPlan, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -231,13 +232,13 @@ public class DoctorResource {
     }
 
     @PostMapping("/generate-schedule")
-    public ResponseEntity<List<DoctorWorkSchedule>> generateWeeklyScheduleForDoctor(
-        @RequestParam Integer doctorId,
+    public ResponseEntity<List<DoctorWorkScheduleDto>> generateWeeklyScheduleForDoctor(
+        @RequestParam Long doctorId,
         @RequestParam LocalDate startDate,
         @RequestParam LocalDate endDate
     ) {
         try {
-            List<DoctorWorkSchedule> schedules = doctorService.generateWeeklyScheduleForDoctor(doctorId, startDate, endDate);
+            List<DoctorWorkScheduleDto> schedules = doctorService.generateWeeklyScheduleForDoctor(doctorId, startDate, endDate);
             return new ResponseEntity<>(schedules, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -245,22 +246,22 @@ public class DoctorResource {
     }
 
     @PutMapping("/times")
-    public ResponseEntity<WorkPlan> updateWorkPlanTimesByWeekday(
-        @RequestParam Integer id,
+    public ResponseEntity<WorkPlanDto> updateWorkPlanTimesByWeekday(
+        @RequestParam Long id,
         @RequestParam LocalTime startTime,
         @RequestParam LocalTime endTime
     ) {
-        WorkPlan updatedWorkPlans = doctorService.updateWorkPlanTimes(id, startTime, endTime);
+        WorkPlanDto updatedWorkPlans = doctorService.updateWorkPlanTimes(id, startTime, endTime);
         return ResponseEntity.ok(updatedWorkPlans);
     }
 
     @PutMapping("/times-schedule")
-    public ResponseEntity<DoctorWorkSchedule> updateWorkScheduleTimes(
-        @RequestParam Integer id,
+    public ResponseEntity<DoctorWorkScheduleDto> updateWorkScheduleTimes(
+        @RequestParam Long id,
         @RequestParam LocalTime startTime,
         @RequestParam LocalTime endTime
     ) {
-        DoctorWorkSchedule updatedWorkSchedule = doctorService.updateWorkScheduleTimes(id, startTime, endTime);
+        DoctorWorkScheduleDto updatedWorkSchedule = doctorService.updateWorkScheduleTimes(id, startTime, endTime);
         return ResponseEntity.ok(updatedWorkSchedule);
     }
 }

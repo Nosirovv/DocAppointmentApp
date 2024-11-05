@@ -22,6 +22,7 @@
     <include file="config/liquibase/changelog/20241025070758_added_entity_MedicalHistory.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241025070759_added_entity_MedicalRecord.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241025070800_added_entity_Patient.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241105105310_added_entity_DoctorWorkSchedule.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20241025070756_added_entity_constraints_Appointment.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20241025070759_added_entity_constraints_MedicalRecord.xml" relativeToChangelogFile="false"/>
